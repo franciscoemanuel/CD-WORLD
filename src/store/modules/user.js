@@ -1,6 +1,8 @@
+import { getAuthenticatedUserId, setAuthenticatedUserId, removeAuthenticatedUserId } from '@/utils/auth'
+
 const user = {
   state: {
-    id: '',
+    id: getAuthenticatedUserId(),
     name: '',
     avatar: '',
     roles: [],
@@ -31,9 +33,15 @@ const user = {
       const password = userInfo.password
       return new Promise((resolve, reject) => {
         if (username !== 'admin' && password !== 'admin') reject('Usuário incorreto')
-        commit('SET_ID', 'SjJg6eIAmIQmtp9LukGhzgOxjgO2')
-        commit('SET_NAME', 'teste')
-        commit('SET_EMAIL', 'teste@teste.com')
+        const user = {
+          id: 'SjJg6eIAmIQmtp9LukGhzgOxjgO2',
+          name: 'teste',
+          email: 'teste@teste.com'
+        }
+        commit('SET_ID', user.id)
+        commit('SET_NAME', user.name)
+        commit('SET_EMAIL', user.email)
+        setAuthenticatedUserId(user.id)
         resolve()
       })
     },
@@ -52,12 +60,15 @@ const user = {
         commit('SET_ID', '')
         commit('SET_NAME', '')
         commit('SET_EMAIL', '')
+        removeAuthenticatedUserId()
+        resolve({})
       })
     },
 
     FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
+        removeAuthenticatedUserId()
         resolve()
       })
     }
