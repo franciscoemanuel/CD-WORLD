@@ -5,7 +5,7 @@ import 'nprogress/nprogress.css'
 import { Message } from 'element-ui'
 import { getAuthenticatedUserId } from '@/utils/auth'
 
-const whiteList = ['/login']
+const whiteList = ['/login', '/cadastro']
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getAuthenticatedUserId()) {

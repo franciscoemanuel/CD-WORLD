@@ -10,17 +10,18 @@ Vue.use(Router)
 import Layout from '../views/layout/Layout'
 
 /**
-* hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
-* redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
-* name:'router-name'             the name is used by <keep-alive> (must set!!!)
-* meta : {
-    title: 'title'               the name show in submenu and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar,
-  }
+ * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
+ * redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
+ * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ * meta : {
+ title: 'title'               the name show in submenu and breadcrumb (recommend set)
+ icon: 'svg-name'             the icon show in the sidebar,
+}
 **/
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
+  { path: '/cadastro', component: () => import('@/views/signUp/index'), hidden: true },
 
   {
     path: '/',
@@ -67,9 +68,8 @@ export const constantRouterMap = [
         meta: { title: 'Form', icon: 'form' }
       }
     ]
-  },
+  }
 
-  { path: '*', redirect: '/404', hidden: true }
 ]
 
 export default new Router({
