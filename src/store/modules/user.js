@@ -1,9 +1,8 @@
-import { getAuthenticatedUserId, setAuthenticatedUserId, removeAuthenticatedUserId } from '@/utils/auth'
 import * as firebase from 'firebase'
 
 const user = {
   state: {
-    id: getAuthenticatedUserId(),
+    id: '',
     name: '',
     avatar: '',
     roles: [],
@@ -36,7 +35,6 @@ const user = {
       commit('SET_ID', registeredUser.uid)
       commit('SET_EMAIL', registeredUser.email)
       commit('SET_NAME', registeredUser.displayName)
-      setAuthenticatedUserId(user.id)
     },
 
     GetInfo({ commit, state }) {
@@ -50,19 +48,11 @@ const user = {
 
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        commit('SET_ID', '')
-        commit('SET_NAME', '')
-        commit('SET_EMAIL', '')
-        removeAuthenticatedUserId()
+        firebase.auth().signOut()
+        commit('SET_ID', null)
+        commit('SET_EMAIL', null)
+        commit('SET_NAME', null)
         resolve({})
-      })
-    },
-
-    FedLogOut({ commit }) {
-      return new Promise(resolve => {
-        commit('SET_ID', '')
-        removeAuthenticatedUserId()
-        resolve()
       })
     },
 
@@ -74,6 +64,12 @@ const user = {
         .ref('users')
         .child(newUser.id)
         .set(newUser)
+    },
+
+    autoSignIn({ commit }, registeredUser) {
+      commit('SET_ID', registeredUser.uid)
+      commit('SET_EMAIL', registeredUser.email)
+      commit('SET_NAME', registeredUser.displayName)
     }
   }
 }

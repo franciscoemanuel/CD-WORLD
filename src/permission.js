@@ -3,12 +3,11 @@ import store from './store'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { Message } from 'element-ui'
-import { getAuthenticatedUserId } from '@/utils/auth'
 
 const whiteList = ['/login', '/cadastro']
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  if (getAuthenticatedUserId()) {
+  if (store.getters.userId) {
     if (to.path === '/login') {
       next({ path: '/' })
     } else {

@@ -12,7 +12,7 @@ import router from './router'
 import store from './store'
 
 import '@/icons' // icon
-import '@/permission' // permission control
+import './permission'
 import './styles/font-awesome.scss' // font-awesome icons
 import * as firebase from 'firebase'
 
@@ -33,6 +33,12 @@ new Vue({
       databaseURL: 'https://cd-world.firebaseio.com',
       projectId: 'cd-world',
       storageBucket: 'cd-world.appspot.com'
+    })
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.$store.dispatch('autoSignIn', user)
+        // this.$store.dispatch('fetchUserData')
+      }
     })
   }
 })

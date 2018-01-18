@@ -98,6 +98,19 @@ export default {
         }
       })
     }
+  },
+  computed: {
+    userId() {
+      return this.$store.getters.userId
+    }
+  },
+  watch: {
+    userId(value) {
+      console.log(value)
+      if (value !== null && value !== undefined) {
+        this.$router.push('/')
+      }
+    }
   }
 }
 </script>
