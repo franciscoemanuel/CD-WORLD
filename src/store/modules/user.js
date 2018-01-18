@@ -1,4 +1,5 @@
 import { getAuthenticatedUserId, setAuthenticatedUserId, removeAuthenticatedUserId } from '@/utils/auth'
+import * as firebase from 'firebase'
 
 const user = {
   state: {
@@ -28,29 +29,21 @@ const user = {
   },
 
   actions: {
-    Login({ commit }, userInfo) {
-      const username = userInfo.username.trim()
+    async Login({ commit }, userInfo) {
+      const email = userInfo.email.trim()
       const password = userInfo.password
-      return new Promise((resolve, reject) => {
-        if (username !== 'admin' && password !== 'admin') reject('Usuário incorreto')
-        const user = {
-          id: 'SjJg6eIAmIQmtp9LukGhzgOxjgO2',
-          name: 'teste',
-          email: 'teste@teste.com'
-        }
-        commit('SET_ID', user.id)
-        commit('SET_NAME', user.name)
-        commit('SET_EMAIL', user.email)
-        setAuthenticatedUserId(user.id)
-        resolve()
-      })
+      const registeredUser = await firebase.auth().signInWithEmailAndPassword(email, password)
+      commit('SET_ID', registeredUser.uid)
+      commit('SET_EMAIL', registeredUser.email)
+      commit('SET_NAME', registeredUser.displayName)
+      setAuthenticatedUserId(user.id)
     },
 
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        commit('SET_ID', 'SjJg6eIAmIQmtp9LukGhzgOxjgO2')
-        commit('SET_NAME', 'teste')
-        commit('SET_EMAIL', 'teste@teste.com')
+        commit('SET_ID', state.id)
+        commit('SET_NAME', state.name)
+        commit('SET_EMAIL', state.email)
         resolve({})
       })
     },
@@ -67,10 +60,20 @@ const user = {
 
     FedLogOut({ commit }) {
       return new Promise(resolve => {
-        commit('SET_TOKEN', '')
+        commit('SET_ID', '')
         removeAuthenticatedUserId()
         resolve()
       })
+    },
+
+    async SignUp({ commit }, user) {
+      const createdUser = await firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+      await createdUser.updateProfile({ displayName: user.username })
+      const newUser = { id: createdUser.uid }
+      return firebase.database()
+        .ref('users')
+        .child(newUser.id)
+        .set(newUser)
     }
   }
 }

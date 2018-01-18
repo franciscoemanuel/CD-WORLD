@@ -5,7 +5,6 @@ import 'normalize.css/normalize.css'// A modern alternative to CSS resets
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en'
-
 import '@/styles/index.scss' // global css
 
 import App from './App'
@@ -15,6 +14,7 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 import './styles/font-awesome.scss' // font-awesome icons
+import * as firebase from 'firebase'
 
 Vue.use(ElementUI, { locale })
 
@@ -25,5 +25,14 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: { App },
+  created() {
+    firebase.initializeApp({
+      apiKey: 'AIzaSyCmbCHXzwHqWbloK-Rd0l5hykreEPvM02I',
+      authDomain: 'cd-world.firebaseapp.com',
+      databaseURL: 'https://cd-world.firebaseio.com',
+      projectId: 'cd-world',
+      storageBucket: 'cd-world.appspot.com'
+    })
+  }
 })

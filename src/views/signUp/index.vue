@@ -39,6 +39,7 @@
 
 <script>
 import { isValidEmail } from '@/utils/validate'
+import { translateFirebaseErrorCodeToMessage } from '@/utils/firebaseErrorMessages'
 
 export default {
   name: 'signUp',
@@ -93,16 +94,17 @@ export default {
     handleSignUp() {
       this.$refs.signUpForm.validate(valid => {
         if (valid) {
-          console.log('valido')
           this.loading = true
-          this.$store.dispatch('Login', this.signUpForm).then(() => {
+          this.$store.dispatch('SignUp', this.signUpForm).then(() => {
             this.loading = false
-            this.$router.push({ path: '/' })
-          }).catch(() => {
+            this.$router.push({ path: '/login' })
+          }).catch((err) => {
+            const message = translateFirebaseErrorCodeToMessage(err.code)
+            this.$notify({ type: 'error', title: 'Falha ao realizar cadastro', message })
             this.loading = false
           })
         } else {
-          console.log('error submit!!')
+          console.log('Erro ao tentar realizar cadastro!!')
           return false
         }
       })

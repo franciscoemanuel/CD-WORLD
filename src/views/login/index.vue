@@ -11,13 +11,13 @@
           </div>
            <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
             class="card-box login-form">
-            <el-form-item prop="username">
-                <el-input prefix-icon="el-icon-fa-envelope-o" name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="exemplo@exemplo.com" />
+            <el-form-item prop="email">
+                <el-input prefix-icon="el-icon-fa-envelope-o" name="email" type="text" v-model="loginForm.email" autoComplete="on" placeholder="exemplo@exemplo.com" />
             </el-form-item>
             <el-form-item prop="password">
-              <el-row gutter="15">
+              <el-row :gutter="15">
                 <el-col :xs="16" :span="20">
-                  <el-input maxlength="12" prefix-icon="el-icon-fa-lock" name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on"
+                  <el-input :maxlength=12 prefix-icon="el-icon-fa-lock" name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on"
                     placeholder="******"></el-input>
                 </el-col>
                 <el-col :span="2">
@@ -39,6 +39,7 @@
 
 <script>
 import { isValidEmail } from '@/utils/validate'
+import { translateFirebaseErrorCodeToMessage } from '@/utils/firebaseErrorMessages'
 
 export default {
   name: 'login',
@@ -59,11 +60,11 @@ export default {
     }
     return {
       loginForm: {
-        username: '',
+        email: '',
         password: ''
       },
       loginRules: {
-        username: [
+        email: [
           { required: true, trigger: 'blur', message: 'Insira um e-mail' },
           { validator: validateEmail, trigger: 'blur' }
         ],
@@ -77,10 +78,7 @@ export default {
     }
   },
   methods: {
-    showPwd() {
-      console.log(this.pwdType)
-      this.pwdType = this.pwdType === 'password' ? '' : 'password'
-    },
+    showPwd() { this.pwdType = this.pwdType === 'password' ? '' : 'password' },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -88,7 +86,10 @@ export default {
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
             this.$router.push({ path: '/' })
-          }).catch(() => {
+          }).catch((err) => {
+            console.log(err)
+            const message = translateFirebaseErrorCodeToMessage(err.code)
+            this.$notify({ type: 'error', title: 'Falha ao fazer login', message })
             this.loading = false
           })
         } else {
