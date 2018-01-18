@@ -10,7 +10,8 @@
     "build": "node build/build.js",
     "build:report": "npm_config_report=true node build/build.js",
     "lint": "eslint --ext .js,.vue src",
-    "test": "npm run lint"
+    "test": "npm run lint",
+    "commit": "git-cz"
   },
   "dependencies": {
     "axios": "0.17.1",
@@ -36,8 +37,10 @@
     "babel-preset-env": "1.6.1",
     "babel-preset-stage-2": "6.24.1",
     "chalk": "2.3.0",
+    "commitizen": "^2.9.6",
     "copy-webpack-plugin": "4.2.3",
     "css-loader": "0.28.7",
+    "cz-conventional-changelog": "^2.1.0",
     "eslint": "4.13.1",
     "eslint-friendly-formatter": "3.0.0",
     "eslint-loader": "1.9.0",
@@ -77,5 +80,10 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
