@@ -1,15 +1,15 @@
-import Cookies from 'js-cookie'
+import ls from 'local-storage'
 
-const authenticatedUserIdKey = 'authenticatedUserId'
+const USER_KEY = 'user'
 
-export function getAuthenticatedUserId() {
-  return Cookies.get(authenticatedUserIdKey)
+export function getUserFromLocalStorage() {
+  return ls.get(USER_KEY)
 }
 
-export function setAuthenticatedUserId(userId) {
-  return Cookies.set(authenticatedUserIdKey, userId)
+export function setLocalStorageUser(user) {
+  return ls.set(USER_KEY, user)
 }
 
-export function removeAuthenticatedUserId() {
-  return Cookies.remove(authenticatedUserIdKey)
+export function removeUserFromLocalStorage() {
+  return ls.remove(USER_KEY)
 }

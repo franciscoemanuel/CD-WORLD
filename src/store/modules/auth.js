@@ -1,34 +1,34 @@
 import * as firebase from 'firebase'
 import { getMenuItems } from '../../utils/menuItems'
+import { setLocalStorageUser, removeUserFromLocalStorage } from '@/utils/auth'
+import { get } from 'lodash'
 
 const user = {
   state: {
-    id: '',
-    name: '',
-    avatar: '',
-    roles: [],
-    email: '',
-    menuItems: []
+    user: null
   },
 
   mutations: {
+    SET_USER: (state, user) => {
+      state.user = user
+    },
     SET_ID: (state, id) => {
-      state.id = id
+      if (state.user) state.id = id
     },
     SET_NAME: (state, name) => {
-      state.name = name
+      if (state.user) state.name = name
     },
     SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
+      if (state.user) state.avatar = avatar
     },
     SET_ROLES: (state, roles) => {
-      state.roles = roles
+      if (state.user) state.roles = roles
     },
     SET_EMAIL: (state, email) => {
-      state.email = email
+      if (state.user) state.email = email
     },
     SET_MENU_ITEMS: (state, menuItems) => {
-      state.menuItems = menuItems
+      if (state.user) state.menuItems = menuItems
     }
   },
 
@@ -37,23 +37,25 @@ const user = {
       const email = userInfo.email.trim()
       const password = userInfo.password
       const registeredUser = await firebase.auth().signInWithEmailAndPassword(email, password)
-      commit('SET_ID', registeredUser.uid)
-      commit('SET_EMAIL', registeredUser.email)
-      commit('SET_NAME', registeredUser.displayName)
+      const appUser = {
+        id: registeredUser.uid,
+        email: registeredUser.email,
+        name: registeredUser.displayName
+      }
+      commit('SET_USER', appUser)
+      setLocalStorageUser(user)
     },
 
     async FetchUserData({ commit, getters }) {
-      commit('SET_LOADING', true)
-      const userId = getters.userId
+      const userId = get(getters.user, 'id')
       const data = await firebase.database().ref('users').child(userId).once('value')
       const userData = data.val()
       const userRoles = userData.roles || []
       commit('SET_ROLES', userRoles)
-      commit('SET_LOADING', false)
     },
 
     LoadMenuItems({ commit, getters }) {
-      const userRoles = getters.roles
+      const userRoles = get(getters.user, 'roles')
       const menuItems = getMenuItems(userRoles)
       commit('SET_MENU_ITEMS', menuItems)
     },
@@ -61,9 +63,8 @@ const user = {
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
         firebase.auth().signOut()
-        commit('SET_ID', null)
-        commit('SET_EMAIL', null)
-        commit('SET_NAME', null)
+        commit('SET_USER', null)
+        removeUserFromLocalStorage()
         resolve({})
       })
     },

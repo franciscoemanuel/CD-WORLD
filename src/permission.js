@@ -2,11 +2,13 @@ import router from './router'
 import store from './store'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import { getUserFromLocalStorage } from '@/utils/auth'
 
 const whiteList = ['/login', '/cadastro']
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  if (store.getters.userId) {
+  console.log('Usuário autenticado: ' + getUserFromLocalStorage())
+  if (getUserFromLocalStorage()) {
     if (to.path === '/login') {
       next({ path: '/' })
     } else {
