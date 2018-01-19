@@ -1,4 +1,5 @@
 import * as firebase from 'firebase'
+import { getMenuItems } from '../../utils/menuItems'
 
 const user = {
   state: {
@@ -6,7 +7,8 @@ const user = {
     name: '',
     avatar: '',
     roles: [],
-    email: ''
+    email: '',
+    menuItems: []
   },
 
   mutations: {
@@ -24,6 +26,9 @@ const user = {
     },
     SET_EMAIL: (state, email) => {
       state.email = email
+    },
+    SET_MENU_ITEMS: (state, menuItems) => {
+      state.menuItems = menuItems
     }
   },
 
@@ -37,13 +42,20 @@ const user = {
       commit('SET_NAME', registeredUser.displayName)
     },
 
-    GetInfo({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        commit('SET_ID', state.id)
-        commit('SET_NAME', state.name)
-        commit('SET_EMAIL', state.email)
-        resolve({})
-      })
+    async FetchUserData({ commit, getters }) {
+      commit('SET_LOADING', true)
+      const userId = getters.userId
+      const data = await firebase.database().ref('users').child(userId).once('value')
+      const userData = data.val()
+      const userRoles = userData.roles || []
+      commit('SET_ROLES', userRoles)
+      commit('SET_LOADING', false)
+    },
+
+    LoadMenuItems({ commit, getters }) {
+      const userRoles = getters.roles
+      const menuItems = getMenuItems(userRoles)
+      commit('SET_MENU_ITEMS', menuItems)
     },
 
     LogOut({ commit, state }) {
@@ -59,17 +71,16 @@ const user = {
     async SignUp({ commit }, user) {
       const createdUser = await firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
       await createdUser.updateProfile({ displayName: user.username })
-      const newUser = { id: createdUser.uid }
-      return firebase.database()
-        .ref('users')
-        .child(newUser.id)
-        .set(newUser)
+      const newUser = { id: createdUser.uid, roles: ['customer'] }
+      return firebase.database().ref('users').child(newUser.id).set(newUser)
     },
 
-    autoSignIn({ commit }, registeredUser) {
+    AutoSignIn({ commit }, registeredUser) {
+      commit('SET_LOADING', true)
       commit('SET_ID', registeredUser.uid)
       commit('SET_EMAIL', registeredUser.email)
       commit('SET_NAME', registeredUser.displayName)
+      commit('SET_LOADING', false)
     }
   }
 }

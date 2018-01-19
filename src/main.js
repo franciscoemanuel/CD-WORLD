@@ -34,10 +34,11 @@ new Vue({
       projectId: 'cd-world',
       storageBucket: 'cd-world.appspot.com'
     })
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        this.$store.dispatch('autoSignIn', user)
-        // this.$store.dispatch('fetchUserData')
+        await this.$store.dispatch('AutoSignIn', user)
+        await this.$store.dispatch('FetchUserData')
+        this.$store.dispatch('LoadMenuItems')
       }
     })
   }

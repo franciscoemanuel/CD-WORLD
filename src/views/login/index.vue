@@ -106,7 +106,6 @@ export default {
   },
   watch: {
     userId(value) {
-      console.log(value)
       if (value !== null && value !== undefined) {
         this.$router.push('/')
       }

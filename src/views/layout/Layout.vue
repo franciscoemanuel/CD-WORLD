@@ -1,5 +1,5 @@
 <template>
-  <div class="app-wrapper" :class="{hideSidebar:!sidebar.opened}">
+  <div class="app-wrapper" v-loading.fullscreen.lock="fullscreenLoading" element-loading-background="#fff" :class="{hideSidebar:!sidebar.opened}">
     <sidebar class="sidebar-container"></sidebar>
     <div class="main-container">
       <navbar></navbar>
@@ -21,6 +21,9 @@ export default {
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar
+    },
+    fullscreenLoading() {
+      return this.$store.getters.loading
     }
   }
 }
