@@ -1,21 +1,21 @@
 import router from './router'
-import store from './store'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import store from '@/store'
 import { getUserFromLocalStorage } from '@/utils/auth'
-
 const whiteList = ['/login', '/cadastro']
+
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  console.log('Usuário autenticado: ' + getUserFromLocalStorage())
   if (getUserFromLocalStorage()) {
-    if (to.path === '/login') {
+    if (whiteList.includes(to.path)) {
       next({ path: '/' })
     } else {
+      if (!store.getters.user) store.dispatch('AutoSignIn', getUserFromLocalStorage())
       next()
     }
   } else {
-    if (whiteList.indexOf(to.path) !== -1) {
+    if (whiteList.includes(to.path)) {
       next()
     } else {
       next('/login')

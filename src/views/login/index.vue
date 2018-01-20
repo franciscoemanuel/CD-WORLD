@@ -40,6 +40,7 @@
 <script>
 import { isValidEmail } from '@/utils/validate'
 import { translateFirebaseErrorCodeToMessage } from '@/utils/firebaseErrorMessages'
+import { setLocalStorageUser } from '@/utils/auth'
 
 export default {
   name: 'login',
@@ -80,23 +81,27 @@ export default {
   methods: {
     showPwd() { this.pwdType = this.pwdType === 'password' ? '' : 'password' },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
+      if (this.$refs.loginForm.validate()) {
+        this.loading = true
+        this.$store.dispatch('Login', this.loginForm)
+          .then(() => {
+            return this.$store.dispatch('FetchUserData')
+          })
+          .then(() => {
+            const authenticatedUser = this.$store.getters.user
+            setLocalStorageUser(authenticatedUser)
             this.loading = false
             this.$router.push({ path: '/' })
-          }).catch((err) => {
-            console.log(err)
+          })
+          .catch((err) => {
+            // console.log(err)
             const message = translateFirebaseErrorCodeToMessage(err.code)
             this.$notify({ type: 'error', title: 'Falha ao fazer login', message })
             this.loading = false
           })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+      } else {
+        this.$notify({ type: 'error', title: 'Falha ao fazer login', message: 'Erro inesperado' })
+      }
     }
   },
   computed: {
