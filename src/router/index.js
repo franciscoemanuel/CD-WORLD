@@ -77,7 +77,47 @@ export const constantRouterMap = [
         meta: { title: 'Form', icon: 'form' }
       }
     ]
+  },
+
+  {
+    path: '/loja',
+    component: Layout,
+    children: [
+      {
+        path: '/',
+        name: 'Loja',
+        component: () => import('@/views/shop/index'),
+        meta: { title: 'Loja' }
+      }
+    ]
+  },
+
+  {
+    path: '/carrinho',
+    component: Layout,
+    children: [
+      {
+        path: '/',
+        name: 'Carrinho',
+        component: () => import('@/views/cart/index'),
+        meta: { title: 'Carrinho' }
+      }
+    ]
+  },
+
+  {
+    path: '/perfil',
+    component: Layout,
+    children: [
+      {
+        path: '/',
+        name: 'Perfil',
+        component: () => import('@/views/profile/index'),
+        meta: { title: 'Meu perfil' }
+      }
+    ]
   }
+
 ]
 
 export default new Router({
