@@ -1,39 +1,41 @@
 <template>
-  <div class="login-container">
-    <el-row type="flex">
-      <el-col :xs="{span: 20, offset: 2}" :sm="{span: 14, offset: 4}" :md="{span: 14, offset: 6}" :lg="{span: 8, offset: 8}">
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>Login</span>
-            <router-link to="/cadastro">
-              <el-button style="float: right; padding: 3px 0" type="text">Cadastre-se</el-button>
-            </router-link>
-          </div>
-           <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
-            class="card-box login-form">
-            <el-form-item prop="email">
-                <el-input prefix-icon="el-icon-fa-envelope-o" name="email" type="text" v-model="loginForm.email" autoComplete="on" placeholder="exemplo@exemplo.com" />
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-row :gutter="15">
-                <el-col :xs="16" :span="20">
-                  <el-input :maxlength=12 prefix-icon="el-icon-fa-lock" name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on"
-                    placeholder="******"></el-input>
-                </el-col>
-                <el-col :span="2">
-                  <el-button @click.native.prevent="showPwd" type="secondary" icon="el-icon-fa-eye"></el-button>
-                </el-col>
-              </el-row>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
-                Entrar
-              </el-button>
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
-    </el-row>
+  <div class="bg-login">
+    <div class="login-container">
+        <el-row type="flex">
+        <el-col :xs="{span: 20, offset: 2}" :sm="{span: 14, offset: 4}" :md="{span: 14, offset: 6}" :lg="{span: 8, offset: 8}">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>Login</span>
+              <router-link to="/cadastro">
+                <el-button style="float: right; padding: 3px 0" type="text">Cadastre-se</el-button>
+              </router-link>
+            </div>
+            <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
+              class="card-box login-form">
+              <el-form-item prop="email">
+                  <el-input prefix-icon="el-icon-fa-envelope-o" name="email" type="text" v-model="loginForm.email" autoComplete="on" placeholder="exemplo@exemplo.com" />
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-row :gutter="15">
+                  <el-col :xs="16" :span="20">
+                    <el-input :maxlength=12 prefix-icon="el-icon-fa-lock" name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on"
+                      placeholder="******"></el-input>
+                  </el-col>
+                  <el-col :span="2">
+                    <el-button @click.native.prevent="showPwd" type="secondary" icon="el-icon-fa-eye"></el-button>
+                  </el-col>
+                </el-row>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
+                  Entrar
+                </el-button>
+              </el-form-item>
+            </el-form>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -121,6 +123,14 @@ export default {
 
 <style>
   .login-container {
-    margin-top: 8em
+    position: relative;
+    padding-top: 8em;
+  }
+  .bg-login {
+    background-image: url('../../assets/background.jpg');
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    height: 50em;
+    position: inherit;
   }
 </style>
