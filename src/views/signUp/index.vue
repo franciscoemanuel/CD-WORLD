@@ -1,39 +1,41 @@
 <template>
-  <div class="cadastro-container">
-    <el-row type="flex">
-      <el-col :xs="{span: 16, offset: 4}" :sm="{span: 14, offset: 4}" :md="{span: 14, offset: 6}" :lg="{span: 8, offset: 8}">
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>Cadastro</span>
-          </div>
-           <el-form autoComplete="on" :model="signUpForm" :rules="signUpRules" ref="signUpForm" label-position="left" label-width="0px"
-            class="card-box signUp-form">
-            <el-form-item prop="username">
-                <el-input prefix-icon="el-icon-fa-user" name="username" type="text" v-model="signUpForm.username" autoComplete="on" placeholder="Digite aqui seu nome completo" />
-            </el-form-item>
-            <el-form-item prop="email">
-                <el-input prefix-icon="el-icon-fa-envelope-o" name="email" type="text" v-model="signUpForm.email" autoComplete="on" placeholder="Digite aqui seu email" />
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input prefix-icon="el-icon-fa-lock" name="password" :type="pwdType" @keyup.enter.native="handleSignUp" v-model="signUpForm.password" autoComplete="on"
-                placeholder="Senha de no mínimo 6 caracteres"></el-input>
-            </el-form-item>
-            <el-form-item prop="passwordConfirmation">
-              <el-input prefix-icon="el-icon-fa-lock" name="passwordConfirmation" :type="pwdType" @keyup.enter.native="handleSignUp" v-model="signUpForm.passwordConfirmation" autoComplete="on"
-                placeholder="Senha de confirmação"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" :loading="loading" @click.native.prevent="handleSignUp">
-                Cadastrar
-              </el-button>
-              <router-link to="/">
-                <el-button type="secondary">Cancelar</el-button>
-              </router-link>
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
-    </el-row>
+  <div class="bg-login">
+    <div class="cadastro-container">
+      <el-row type="flex">
+        <el-col :xs="{span: 16, offset: 4}" :sm="{span: 14, offset: 4}" :md="{span: 14, offset: 6}" :lg="{span: 8, offset: 8}">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>Cadastro</span>
+            </div>
+            <el-form autoComplete="on" :model="signUpForm" :rules="signUpRules" ref="signUpForm" label-position="left" label-width="0px"
+              class="card-box signUp-form">
+              <el-form-item prop="username">
+                  <el-input prefix-icon="el-icon-fa-user" name="username" type="text" v-model="signUpForm.username" autoComplete="on" placeholder="Digite aqui seu nome completo" />
+              </el-form-item>
+              <el-form-item prop="email">
+                  <el-input prefix-icon="el-icon-fa-envelope-o" name="email" type="text" v-model="signUpForm.email" autoComplete="on" placeholder="Digite aqui seu email" />
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input prefix-icon="el-icon-fa-lock" name="password" :type="pwdType" @keyup.enter.native="handleSignUp" v-model="signUpForm.password" autoComplete="on"
+                  placeholder="Senha de no mínimo 6 caracteres"></el-input>
+              </el-form-item>
+              <el-form-item prop="passwordConfirmation">
+                <el-input prefix-icon="el-icon-fa-lock" name="passwordConfirmation" :type="pwdType" @keyup.enter.native="handleSignUp" v-model="signUpForm.passwordConfirmation" autoComplete="on"
+                  placeholder="Senha de confirmação"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" :loading="loading" @click.native.prevent="handleSignUp">
+                  Cadastrar
+                </el-button>
+                <router-link to="/">
+                  <el-button type="secondary">Cancelar</el-button>
+                </router-link>
+              </el-form-item>
+            </el-form>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -127,6 +129,14 @@ export default {
 
 <style>
   .cadastro-container {
-    margin-top: 8em
+    padding-top: 8em;
+    position: relative;
+  }
+  .bg-login {
+    background-image: url('../../assets/background.jpg');
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    height: 50em;
+    position: inherit;
   }
 </style>
