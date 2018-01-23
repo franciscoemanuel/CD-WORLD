@@ -8,17 +8,17 @@
             <img :src="album.cover" class="image">
             <div style="padding: 5px;">
               <el-row>
-                <el-col :span="18" >
+                <el-col :span="18" :xl="16">
                   <span class="albumTitle">{{album.title}}</span>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" :xl="8">
                   <span class="albumPrice">R$ {{album.price}}</span>
                 </el-col>
               </el-row>
               <div class="bottom clearfix">
                 <span class="albumArtist">{{album.artist}}</span>
                 <span class="albumGenre">{{album.genre}}</span>
-                <el-button type="primary" class="button addToCart" @click.native.prevent="addToCart">
+                <el-button type="primary" class="button addToCart" @click.native.prevent="addToCart(album)">
                   Adicionar ao carrinho
                   <i class="el-icon-fa-cart-plus" aria-hidden="true"></i>
                 </el-button>
@@ -39,8 +39,11 @@ export default {
     }
   },
   methods: {
-    addToCart: () => {
-      console.log('adicionou')
+    addToCart(album) {
+      const albumsInCart = this.$store.getters.cart.albums
+      if (albumsInCart.find(albumInCart => albumInCart.id === album.id)) return
+      this.$store.dispatch('addToCart', album)
+      this.$store.dispatch('calculateTotalPrice', album.price)
     }
   },
   created() {
