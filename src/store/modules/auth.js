@@ -1,6 +1,6 @@
 import * as firebase from 'firebase'
 import { removeUserFromLocalStorage } from '@/utils/auth'
-import { get } from 'lodash'
+import { get, set } from 'lodash'
 
 const user = {
   state: {
@@ -9,22 +9,22 @@ const user = {
 
   mutations: {
     SET_USER: (state, user) => {
-      state.user = user
+      set(state, 'user', user)
     },
     SET_ID: (state, id) => {
-      if (state.user) state.user.id = id
+      set(state, 'user.id', id)
     },
     SET_NAME: (state, name) => {
-      if (state.user) state.user = name
+      set(state, 'user.name', name)
     },
     SET_AVATAR: (state, avatar) => {
-      if (state.user) state.user.avatar = avatar
+      set(state, 'user.avatar', avatar)
     },
     SET_ROLES: (state, roles) => {
-      if (state.user) state.user.roles = roles
+      set(state, 'user.roles', roles)
     },
     SET_EMAIL: (state, email) => {
-      if (state.user) state.useremail = email
+      set(state, 'user.email', email)
     }
   },
 

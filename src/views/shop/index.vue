@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <h1>Loja</h1>
-    <div class="albums-container">
+    <div class="albums-container" v-loading="isLoadingAlbums">
       <el-row v-for="album in albums" :key="album.id">
-        <el-col :sm="{span: 9, offset: 2}" :md="{span: 6}" :lg="{span: 5, offset: 1}" :xl="{span: 3}" v-for="(o) in 100" :key="o">
+        <el-col :sm="{span: 9, offset: 2}" :md="{span: 6}" :lg="{span: 5, offset: 1}" :xl="{span: 3}">
           <el-card :body-style="{ padding: '0px' }" class="album-container">
             <img :src="album.cover" class="image">
             <div style="padding: 5px;">
@@ -18,7 +18,7 @@
               <div class="bottom clearfix">
                 <span class="albumArtist">{{album.artist}}</span>
                 <span class="albumGenre">{{album.genre}}</span>
-                <el-button type="primary" class="button addToCart">
+                <el-button type="primary" class="button addToCart" @click.native.prevent="addToCart">
                   Adicionar ao carrinho
                   <i class="el-icon-fa-cart-plus" aria-hidden="true"></i>
                 </el-button>
@@ -33,8 +33,21 @@
 
 <script>
 export default {
+  data() {
+    return {
+      isLoadingAlbums: true
+    }
+  },
+  methods: {
+    addToCart: () => {
+      console.log('adicionou')
+    }
+  },
   created() {
     this.$store.dispatch('loadAlbums')
+      .then(() => {
+        this.isLoadingAlbums = false
+      })
   },
   computed: {
     albums() {
