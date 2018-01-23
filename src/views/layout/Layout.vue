@@ -37,4 +37,7 @@ export default {
   height: 100%;
   width: 100%;
 }
+.main-container {
+  min-width: 350px;
+}
 </style>
