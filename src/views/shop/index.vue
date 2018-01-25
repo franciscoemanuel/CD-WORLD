@@ -2,17 +2,17 @@
   <div class="app-container">
     <h1>Loja</h1>
     <div class="albums-container" v-loading="isLoadingAlbums">
-      <el-row v-for="album in albums" :key="album.id">
-        <el-col :sm="{span: 9, offset: 2}" :md="{span: 6}" :lg="{span: 5, offset: 1}" :xl="{span: 3}">
+      <el-row>
+        <el-col v-for="album in albums" :key="album.id" :sm="{span: 9, offset: 2}" :md="{span: 6}" :lg="{span: 5, offset: 1}" :xl="{span: 3}">
           <el-card :body-style="{ padding: '0px' }" class="album-container">
             <img :src="album.cover" class="image">
-            <div style="padding: 5px;">
+            <div style="padding: 15px;">
               <el-row>
-                <el-col :span="18" :xl="16">
+                <el-col :span="18" :xl="17">
                   <span class="albumTitle">{{album.title}}</span>
                 </el-col>
-                <el-col :span="6" :xl="8">
-                  <span class="albumPrice">R$ {{album.price}}</span>
+                <el-col :span="6" :xl="7">
+                  <span class="albumPrice">R${{album.price}}</span>
                 </el-col>
               </el-row>
               <div class="bottom clearfix">
@@ -72,6 +72,7 @@ export default {
   }
   .addToCart {
     width: 100%;
+    padding: 0.5em;
   }
   .albumPrice {
     color: green;
@@ -80,7 +81,7 @@ export default {
     display: block;
   }
   .album-container {
-    line-height: 1.2em;
+    line-height: 1.5em;
     margin-top: 1em;
   }
   .albumGenre {

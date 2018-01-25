@@ -15,7 +15,6 @@ const album = {
     async loadAlbums({ commit }) {
       const data = await firebase.database().ref('albums').once('value')
       const obj = data.val()
-      console.log(obj)
       const albums = Object.keys(obj).map(key => {
         const album = obj[key]
         album.id = key

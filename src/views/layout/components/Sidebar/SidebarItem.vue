@@ -4,8 +4,10 @@
 
       <router-link :to="item.link" :key="item.title">
         <el-menu-item :index="item.link" class="submenu-title-noDropdown">
-          <i :class="item.icon"></i>
           <span>{{item.title}}</span>
+          <i :class="item.icon">
+              <el-badge :value="itemsOnCart" v-if="item.icon === 'el-icon-fa-shopping-cart'"></el-badge>
+          </i>
         </el-menu-item>
       </router-link>
 
@@ -23,6 +25,12 @@ export default {
     isNest: {
       type: Boolean,
       default: false
+    }
+  },
+  computed: {
+    itemsOnCart() {
+      const cart = this.$store.getters.cart
+      return cart ? cart.albums.length : 0
     }
   }
 }
