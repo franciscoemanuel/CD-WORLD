@@ -11,24 +11,24 @@
           </el-table-column>
           <el-table-column prop="title" label="Álbum"></el-table-column>
           <el-table-column prop="artist" label="Artista"></el-table-column>
-          <el-table-column label="Preço unit.">
+          <el-table-column label="Preço unit." min-width="100">
             <template slot-scope="scope">
               <span>{{scope.row.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="Quantidade">
+          <el-table-column label="Quantidade" min-width="150">
             <template slot-scope="scope">
               <el-input-number controls-position="right" :min="1" @change="recalculateSubTotal($event, scope.row)" v-model="scope.row.quantity" size="mini"></el-input-number>
             </template>
           </el-table-column>
-          <el-table-column label="Subtotal">
+          <el-table-column label="Subtotal" min-width="100">
             <template slot-scope="scope">
               <span>{{scope.row.subTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}}</span>
             </template>
           </el-table-column>
           <el-table-column>
             <template slot-scope="scope">
-              <el-button size="mini" @click.prevent.native="removeFromCart(scope)" type="danger">
+              <el-button size="mini" @click.prevent.native="removeFromCart(scope.row)" type="danger">
                 <i class="el-icon-fa-times"></i>
               </el-button>
             </template>
@@ -36,38 +36,52 @@
         </el-table>
       </el-col>
     </el-row>
-    <el-row>
-      <el-col :md="6">
-        <el-card id="totalPriceCard" v-if="cartItems.length > 0">
-          <div slot="header" class="clearfix">
-            <h3 class="totalPriceLabel">Total: {{totalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}}</h3>
-          </div>
-          <div class="total">
-            <el-button type="success" plain id="btn-finishOrder">
-              Finalizar pedido
-              <i class="el-icon-fa-check"></i>
-            </el-button>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+    <div v-if="hasItemsInTheCart()">
+      <h3 class="totalPriceLabel">Total: {{totalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}}</h3>
+      <el-button :loading="loading" type="success" plain id="btn-finishOrder" @click.prevent.native="checkoutPurchase">
+        Finalizar pedido
+        <i class="el-icon-fa-check"></i>
+      </el-button>
+    </div>
   </div>
 </template>
 
 <script>
+import { translateFirebaseErrorCodeToMessage } from '@/utils/firebaseErrorMessages'
+
 export default {
   data() {
     return {
-      DeletePopOverIsVisible: false
+      loading: false
     }
   },
   methods: {
     recalculateSubTotal(newQuantity, album) {
       album.quantity = newQuantity
       this.$store.dispatch('recalculateSubTotal', album)
+      this.$store.dispatch('calculateTotalPrice')
     },
     removeFromCart(album) {
       this.$store.dispatch('removeFromCart', album)
+      this.$store.dispatch('calculateTotalPrice')
+    },
+    hasItemsInTheCart() {
+      return this.cartItems.length > 0
+    },
+    checkoutPurchase() {
+      this.loading = true
+      this.$store.dispatch('checkoutPurchase')
+        .then(() => {
+          this.loading = false
+          this.$store.dispatch('cleanCart')
+          this.$notify({ type: 'success', title: 'Sucesso', message: 'Compra efetuada!' })
+        })
+        .catch((err) => {
+          console.log(err)
+          this.loading = false
+          const message = translateFirebaseErrorCodeToMessage(err.code)
+          this.$notify({ type: 'error', title: 'Falha ao fazer login', message })
+        })
     }
   },
   computed: {

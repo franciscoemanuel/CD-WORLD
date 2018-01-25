@@ -1,4 +1,5 @@
-import { get, set } from 'lodash'
+import { get, set, sumBy, findIndex, pick } from 'lodash'
+import * as firebase from 'firebase'
 
 const purchase = {
   state: {
@@ -25,7 +26,8 @@ const purchase = {
       album.subTotal = newSubTotal
     },
     REMOVE_FROM_CART: (state, albumId) => {
-      const albumToRemove = state.cart.albums.indexOf(album => album.id === albumId)
+      const albums = get(state.cart, 'albums')
+      const albumToRemove = findIndex(albums, album => album.id === albumId)
       state.cart.albums.splice(albumToRemove, 1)
     }
   },
@@ -36,7 +38,8 @@ const purchase = {
       commit('ADD_ALBUM_TO_CART', album)
     },
     calculateTotalPrice: ({ commit, getters }, albumPrice) => {
-      const totalPrice = getters.cart.totalPrice + albumPrice
+      const albums = get(getters.cart, 'albums')
+      const totalPrice = sumBy(albums, 'subTotal')
       commit('SET_TOTAL_PRICE', totalPrice)
     },
     recalculateSubTotal: ({ commit, getters }, album) => {
@@ -47,6 +50,19 @@ const purchase = {
     removeFromCart: ({ commit }, albumToRemove) => {
       const albumId = get(albumToRemove, 'id')
       commit('REMOVE_FROM_CART', albumId)
+    },
+    async checkoutPurchase({ commit, getters }) {
+      const cart = getters.cart
+      const { totalPrice } = cart
+      const purchaseDate = new Date().toISOString()
+      const userId = getters.user.id
+      const albums = cart.albums.map(album => pick(album, ['id', 'quantity', 'subTotal']))
+      const newPurchase = { userId, albums, totalPrice, purchaseDate }
+      await firebase.database().ref('purchases').push(newPurchase)
+    },
+    cleanCart: ({ commit }) => {
+      const emptyCart = { albums: [], totalPrice: 0.0 }
+      commit('SET_CART', emptyCart)
     }
   }
 }

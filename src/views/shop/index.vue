@@ -43,7 +43,8 @@ export default {
       const albumsInCart = this.$store.getters.cart.albums
       if (albumsInCart.find(albumInCart => albumInCart.id === album.id)) return
       this.$store.dispatch('addToCart', album)
-      this.$store.dispatch('calculateTotalPrice', album.price)
+      this.$store.dispatch('calculateTotalPrice')
+      this.$notify({ type: 'success', title: 'Sucesso', message: 'Item adicionado ao carrinho' })
     }
   },
   created() {

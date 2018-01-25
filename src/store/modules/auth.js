@@ -59,7 +59,7 @@ const user = {
       const createdUser = await firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
       await createdUser.updateProfile({ displayName: user.username })
       const newUser = { id: createdUser.uid, roles: ['customer'] }
-      return firebase.database().ref('users').child(newUser.id).set(newUser)
+      return firebase.database().ref('users').child(newUser.id).push(newUser)
     },
 
     AutoSignIn({ commit }, localStorageUser) {
