@@ -6,7 +6,8 @@ const purchase = {
     cart: {
       albums: [],
       totalPrice: 0.0
-    }
+    },
+    userPurchases: []
   },
   mutations: {
     SET_CART: (state, cart) => {
@@ -29,25 +30,28 @@ const purchase = {
       const albums = get(state.cart, 'albums')
       const albumToRemove = findIndex(albums, album => album.id === albumId)
       state.cart.albums.splice(albumToRemove, 1)
+    },
+    SET_USER_PURCHASES: (state, purchases) => {
+      state.userPurchases = purchases
     }
   },
 
   actions: {
-    addToCart: ({ commit }, album) => {
+    addToCart({ commit }, album) {
       album.subTotal = album.price
       commit('ADD_ALBUM_TO_CART', album)
     },
-    calculateTotalPrice: ({ commit, getters }, albumPrice) => {
+    calculateTotalPrice({ commit, getters }, albumPrice) {
       const albums = get(getters.cart, 'albums')
       const totalPrice = sumBy(albums, 'subTotal')
       commit('SET_TOTAL_PRICE', totalPrice)
     },
-    recalculateSubTotal: ({ commit, getters }, album) => {
+    recalculateSubTotal({ commit, getters }, album) {
       const newSubTotal = (album.quantity * album.price)
       const albumId = get(album, 'id')
       commit('UPDATE_ALBUM_SUBTOTAL', { albumId, newSubTotal })
     },
-    removeFromCart: ({ commit }, albumToRemove) => {
+    removeFromCart({ commit }, albumToRemove) {
       const albumId = get(albumToRemove, 'id')
       commit('REMOVE_FROM_CART', albumId)
     },
@@ -60,9 +64,14 @@ const purchase = {
       const newPurchase = { userId, albums, totalPrice, purchaseDate }
       await firebase.database().ref('purchases').push(newPurchase)
     },
-    cleanCart: ({ commit }) => {
+    cleanCart({ commit }) {
       const emptyCart = { albums: [], totalPrice: 0.0 }
       commit('SET_CART', emptyCart)
+    },
+    async fetchUserPurchases({ commit, getters }) {
+      const userId = get(getters.user, 'id')
+      const purchaseData = (await firebase.database().ref('purchases').orderByChild('userId').equalTo(userId).once('value')).val()
+      console.log(purchaseData)
     }
   }
 }

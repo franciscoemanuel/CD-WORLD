@@ -116,6 +116,19 @@ export const constantRouterMap = [
         meta: { title: 'Meu perfil' }
       }
     ]
+  },
+
+  {
+    path: '/minhas-compras',
+    component: Layout,
+    children: [
+      {
+        path: '/',
+        name: 'minhas-compras',
+        component: () => import('@/views/purchases/index'),
+        meta: { title: 'Minhas compras' }
+      }
+    ]
   }
 
 ]
