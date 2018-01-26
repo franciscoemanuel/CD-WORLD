@@ -13,7 +13,7 @@
           <el-table-column prop="artist" label="Artista"></el-table-column>
           <el-table-column label="Preço unit." min-width="100">
             <template slot-scope="scope">
-              <span>{{scope.row.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}}</span>
+              <span>{{scope.row.price | currency}}</span>
             </template>
           </el-table-column>
           <el-table-column label="Quantidade" min-width="150">
@@ -23,7 +23,7 @@
           </el-table-column>
           <el-table-column label="Subtotal" min-width="100">
             <template slot-scope="scope">
-              <span>{{scope.row.subTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}}</span>
+              <span>{{scope.row.subTotal | currency}}</span>
             </template>
           </el-table-column>
           <el-table-column>
@@ -37,7 +37,7 @@
       </el-col>
     </el-row>
     <div v-if="hasItemsInTheCart()">
-      <h3 class="totalPriceLabel">Total: {{totalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}}</h3>
+      <h3 class="totalPriceLabel">Total: {{totalPrice | currency}}</h3>
       <el-button :loading="loading" type="success" plain id="btn-finishOrder" @click.prevent.native="checkoutPurchase">
         Finalizar pedido
         <i class="el-icon-fa-check"></i>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { translateFirebaseErrorCodeToMessage } from '@/utils/firebaseErrorMessages'
+import { translateFirebaseErrorCodeToMessage } from '@/utils/firebase'
 
 export default {
   data() {
@@ -56,6 +56,9 @@ export default {
     }
   },
   methods: {
+    total() {
+      return this.totalPrice
+    },
     recalculateSubTotal(newQuantity, album) {
       album.quantity = newQuantity
       this.$store.dispatch('recalculateSubTotal', album)

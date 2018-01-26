@@ -1,4 +1,5 @@
 import * as firebase from 'firebase'
+import { normalizeObjectsToArrayById } from '@/utils/firebase'
 
 const album = {
   state: {
@@ -15,11 +16,7 @@ const album = {
     async loadAlbums({ commit }) {
       const data = await firebase.database().ref('albums').once('value')
       const obj = data.val()
-      const albums = Object.keys(obj).map(key => {
-        const album = obj[key]
-        album.id = key
-        return album
-      })
+      const albums = normalizeObjectsToArrayById(obj)
       commit('SET_LOADED_ALBUMS', albums)
     }
   }

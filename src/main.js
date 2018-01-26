@@ -16,6 +16,12 @@ import './permission'
 import './styles/font-awesome.scss' // font-awesome icons
 import * as firebase from 'firebase'
 
+// Filters
+import { currencyFilter, dateFilter } from '@/filters'
+
+Vue.filter('currency', currencyFilter)
+Vue.filter('date', dateFilter)
+
 Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false

@@ -41,7 +41,7 @@
 
 <script>
 import { isValidEmail } from '@/utils/validate'
-import { translateFirebaseErrorCodeToMessage } from '@/utils/firebaseErrorMessages'
+import { translateFirebaseErrorCodeToMessage } from '@/utils/firebase'
 import { setLocalStorageUser } from '@/utils/auth'
 
 export default {

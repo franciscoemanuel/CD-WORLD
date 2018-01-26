@@ -1,5 +1,7 @@
 import { get, set, sumBy, findIndex, pick } from 'lodash'
 import * as firebase from 'firebase'
+import { normalizeObjectsToArrayById } from '@/utils/firebase'
+import * as shortid from 'shortid'
 
 const purchase = {
   state: {
@@ -61,7 +63,9 @@ const purchase = {
       const purchaseDate = new Date().toISOString()
       const userId = getters.user.id
       const albums = cart.albums.map(album => pick(album, ['id', 'quantity', 'subTotal']))
-      const newPurchase = { userId, albums, totalPrice, purchaseDate }
+      const status = 'enviado'
+      const shortId = shortid.generate()
+      const newPurchase = { userId, albums, totalPrice, status, shortId, purchaseDate }
       await firebase.database().ref('purchases').push(newPurchase)
     },
     cleanCart({ commit }) {
@@ -71,7 +75,8 @@ const purchase = {
     async fetchUserPurchases({ commit, getters }) {
       const userId = get(getters.user, 'id')
       const purchaseData = (await firebase.database().ref('purchases').orderByChild('userId').equalTo(userId).once('value')).val()
-      console.log(purchaseData)
+      const userPurchases = normalizeObjectsToArrayById(purchaseData)
+      commit('SET_USER_PURCHASES', userPurchases)
     }
   }
 }
