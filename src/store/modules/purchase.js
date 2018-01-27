@@ -77,6 +77,17 @@ const purchase = {
       const purchaseData = (await firebase.database().ref('purchases').orderByChild('userId').equalTo(userId).once('value')).val()
       const userPurchases = normalizeObjectsToArrayById(purchaseData)
       commit('SET_USER_PURCHASES', userPurchases)
+    },
+    async fetchPurchase({ commit }, purchaseId) {
+      const purchaseData = (await firebase.database().ref('purchases').child(purchaseId).once('value')).val()
+      purchaseData.id = purchaseId
+      const albumsPromises = purchaseData.albums.map(async album => {
+        const albumData = (await firebase.database().ref('albums').child(album.id).once('value')).val()
+        return { ...albumData, ...album }
+      })
+      const albums = await Promise.all(albumsPromises)
+      set(purchaseData, 'albums', albums)
+      return purchaseData
     }
   }
 }

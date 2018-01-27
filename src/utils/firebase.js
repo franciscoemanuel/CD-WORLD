@@ -1,7 +1,8 @@
 const defaultMessage = 'Erro inesperado, tente novamente mais tarde!'
 
 const firebaseErrors = [
-  { code: 'auth/user-not-found', message: 'E-mail ou senha incorretos' },
+  { code: 'auth/user-not-found', message: 'E-mail não cadastrado' },
+  { code: 'auth/wrong-password', message: 'Senha incorreta para o e-mail digitado' },
   { code: 'auth/email-already-in-use', message: 'Este e-mail já está em uso' }
 ]
 

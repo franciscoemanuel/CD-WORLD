@@ -1,12 +1,12 @@
 <template>
- <div class="app-container">
+ <div class="app-container" v-loading="isLoadingPurchases">
     <h1>Meus pedidos</h1>
-    <div class="purchases-container" v-loading="isLoadingPurchases">
+    <div class="purchases-container">
       <el-row>
         <el-col>
           <el-table :data="purchases" empty-text="Nenhuma compra realizada">
             <el-table-column prop="shortId" label="Código do pedido"></el-table-column>
-            <el-table-column sortable sort-by="date" label="Pedido realizado em">
+            <el-table-column sortable sort-by="purchaseDate" label="Pedido realizado em">
               <template slot-scope="scope">
                 <span>{{scope.row.purchaseDate | date}}</span>
               </template>
@@ -20,23 +20,33 @@
               <template slot-scope="scope">
                 <span>
                   {{scope.row.status}}
-                  <i class="el-icon-fa-check enviado"></i>
+                  <i class="el-icon-fa-check sent"></i>
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="Detalhes"></el-table-column>
+            <el-table-column label="Detalhes">
+              <template slot-scope="scope">
+                <el-button size="mini" @click.prevent.native="showDetail(scope.row)">
+                  <i class="el-icon-fa-eye"></i>
+                </el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </el-col>
       </el-row>
     </div>
+    <app-purchase-detail-dialog v-if="detailDialogIsVisible" :purchaseId="selectedPurchaseId" :visibility.sync="detailDialogIsVisible"></app-purchase-detail-dialog>
  </div>
 </template>
 
 <script>
+import { orderBy } from 'lodash'
 export default {
   data() {
     return {
-      isLoadingPurchases: true
+      isLoadingPurchases: true,
+      detailDialogIsVisible: false,
+      selectedPurchaseId: null
     }
   },
   created() {
@@ -49,16 +59,24 @@ export default {
         this.isLoadingPurchases = false
       })
   },
+  methods: {
+    showDetail(purchase) {
+      console.log(purchase.id)
+      this.detailDialogIsVisible = true
+      this.selectedPurchaseId = purchase.id
+    }
+  },
   computed: {
     purchases() {
-      return this.$store.getters.userPurchases
+      const userPurchases = this.$store.getters.userPurchases
+      return orderBy(userPurchases, 'purchaseDate', 'desc')
     }
   }
 }
 </script>
 
 <style>
-.enviado {
+.sent {
   color: green;
 }
 </style>

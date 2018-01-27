@@ -43,9 +43,9 @@ const user = {
 
     async FetchUserData({ commit, getters }) {
       const userId = get(getters.user, 'id')
-      const data = await firebase.database().ref('users').child(userId).once('value')
-      const userData = data.val()
+      const userData = (await firebase.database().ref('users').child(userId).once('value')).val()
       const userRoles = userData.roles || []
+      console.log(userData, userRoles)
       commit('SET_ROLES', userRoles)
     },
 
@@ -59,7 +59,7 @@ const user = {
       const createdUser = await firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
       await createdUser.updateProfile({ displayName: user.username })
       const newUser = { id: createdUser.uid, roles: ['customer'] }
-      return firebase.database().ref('users').child(newUser.id).push(newUser)
+      return firebase.database().ref('users').child(newUser.id).set(newUser)
     },
 
     AutoSignIn({ commit }, localStorageUser) {
