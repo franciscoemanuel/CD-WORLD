@@ -2,8 +2,7 @@ const menuItemsByRole = {
   'customer': [
     { icon: 'el-icon-goods', title: 'Loja', link: '/loja' },
     { icon: 'el-icon-fa-shopping-cart', title: 'Meu carrinho', link: '/carrinho' },
-    { icon: 'el-icon-fa-truck', title: 'Meus pedidos', link: '/minhas-compras' },
-    { icon: 'el-icon-fa-user', title: 'Meu perfil', link: '/perfil' }
+    { icon: 'el-icon-fa-truck', title: 'Meus pedidos', link: '/minhas-compras' }
   ],
   'manager': [
     { icon: 'el-icon-fa-archive', title: 'Estoque', link: '/estoque' },

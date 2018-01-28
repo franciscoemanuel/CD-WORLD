@@ -1,9 +1,10 @@
 <template>
-  <div class="app-container">
-    <el-dialog v-loading="isLoadingPurchase" title="Cupom fiscal" center fullscreen :visible.sync="isVisible" @close="updateParentProp">
+  <div class="app-container" v-loading="isLoadingPurchase">
+    <el-dialog title="Detalhes das compra" v-if="purchase" center fullscreen :visible.sync="isVisible" @close="updateParentProp">
        <el-row>
         <el-col :span="24">
-          <table class="printer-ticket" v-if="!isLoadingPurchase">
+          <el-button @click="print" center type="primary" class="print no-print" size="mini">Imprimir <i class="el-icon-fa-print"></i></el-button>
+          <table class="printer-ticket">
             <thead>
               <tr>
                 <th class="title" colspan="3">CD-WORLD</th>
@@ -13,8 +14,8 @@
               </tr>
               <tr>
                 <th colspan="3">
-                  Nome do cliente <br />
-                  000.000.000-00
+                  Av. do Ferroviário, 75 - Centro, Maceió - AL, 57020-600 <br />
+                  10.825.373/0001-55
                 </th>
               </tr>
               <tr>
@@ -24,21 +25,23 @@
               </tr>
             </thead>
             <tbody>
-              <tr class="top" v-for="album in purchase.albums" :key="album.id">
-                <td colspan="3">{{album.title}}</td>
+              <tr class="header">
+                <td>Álbum</td>
+                <td>Quantidade</td>
+                <td>SubTotal</td>
+              </tr>
+            </tbody>
+            <tbody v-for="album in purchase.albums" :key="album.id">
+              <tr class="top">
+                <td colspan="3">{{album.title}} - {{album.artist}}</td>
               </tr>
               <tr>
-                <td>R$7,99</td>
-                <td>2.0</td>
-                <td>R$15,98</td>
+                <td>{{album.price | currency}}</td>
+                <td>{{album.quantity}}</td>
+                <td>{{album.subTotal | currency}}</td>
               </tr>
               <tr>
-                <td colspan="3">Opcional Adicicional: grande</td>
-              </tr>
-              <tr>
-                <td>R$0,33</td>
-                <td>2.0</td>
-                <td>R$0,66</td>
+                <td>Código: {{album.id}}</td>
               </tr>
             </tbody>
             <tfoot>
@@ -49,19 +52,19 @@
               </tr>
               <tr class="ttu">
                 <td colspan="2">Sub-total</td>
-                <td align="right">R$43,60</td>
+                <td align="right">{{purchase.totalPrice | currency}}</td>
               </tr>
               <tr class="ttu">
                 <td colspan="2">Taxa de serviço</td>
-                <td align="right">R$4,60</td>
+                <td align="right">R$ 0,00</td>
               </tr>
               <tr class="ttu">
                 <td colspan="2">Desconto</td>
-                <td align="right">5,00%</td>
+                <td align="right">0,0%</td>
               </tr>
               <tr class="ttu">
                 <td colspan="2">Total</td>
-                <td align="right">R$45,56</td>
+                <td align="right">{{purchase.totalPrice | currency}}</td>
               </tr>
               <tr class="sup ttu p--0">
                 <td colspan="3">
@@ -70,23 +73,23 @@
               </tr>
               <tr class="ttu">
                 <td colspan="2">Voucher</td>
-                <td align="right">R$10,00</td>
+                <td align="right">{{purchase.totalPrice | currency}}</td>
               </tr>
               <tr class="ttu">
                 <td colspan="2">Dinheiro</td>
-                <td align="right">R$10,00</td>
+                <td align="right">R$0,00</td>
               </tr>
               <tr class="ttu">
                 <td colspan="2">Total pago</td>
-                <td align="right">R$10,00</td>
+                <td align="right">{{purchase.totalPrice | currency}}</td>
               </tr>
               <tr class="ttu">
                 <td colspan="2">Troco</td>
-                <td align="right">R$0,44</td>
+                <td align="right">R$0,00</td>
               </tr>
               <tr class="sup">
                 <td colspan="3" align="center">
-                  <b>Pedido:</b>
+                  <b>Pedido: {{purchase.shortId}}</b>
                 </td>
               </tr>
               <tr class="sup">
@@ -126,6 +129,9 @@ export default {
   methods: {
     updateParentProp(isVisible) {
       this.$emit('update:visibility', false)
+    },
+    print() {
+      console.log(window.print())
     }
   }
 }
@@ -183,5 +189,19 @@ export default {
 		td { padding-top: @printer-padding-base; }
 	}
 	.last td { padding-bottom: @printer-padding-base; }
+}
+.header {
+  font-weight: bold;
+}
+.print {
+  margin: 0 auto;
+  display: block;
+}
+@media print
+{
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
 }
 </style>

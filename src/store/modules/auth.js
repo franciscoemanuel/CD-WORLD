@@ -45,7 +45,6 @@ const user = {
       const userId = get(getters.user, 'id')
       const userData = (await firebase.database().ref('users').child(userId).once('value')).val()
       const userRoles = userData.roles || []
-      console.log(userData, userRoles)
       commit('SET_ROLES', userRoles)
     },
 

@@ -41,7 +41,10 @@ export default {
   methods: {
     addToCart(album) {
       const albumsInCart = this.$store.getters.cart.albums
-      if (albumsInCart.find(albumInCart => albumInCart.id === album.id)) return
+      if (albumsInCart.find(albumInCart => albumInCart.id === album.id)) {
+        this.$notify.info({ message: 'O item já foi adicionado ao carrinho' })
+        return
+      }
       this.$store.dispatch('addToCart', album)
       this.$store.dispatch('calculateTotalPrice')
       this.$notify({ type: 'success', title: 'Sucesso', message: 'Item adicionado ao carrinho' })

@@ -4,14 +4,15 @@
     <breadcrumb></breadcrumb>
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-        <img class="user-avatar" :src="user.avatar+'?imageView2/1/w/80/h/80'">
+        <img class="user-avatar" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLmxOW6v6yekZo4auW92L8V0PD7PM7aKVgT7KRkBcy-lt6_V5S">
         <i class="el-icon-caret-bottom"></i>
       </div>
       <el-dropdown-menu class="user-dropdown" slot="dropdown">
         <router-link class="inlineBlock" to="/">
-          <el-dropdown-item>
-            Home
-          </el-dropdown-item>
+          <el-dropdown-item>Home</el-dropdown-item>
+        </router-link>
+        <router-link class="inlineBlock" to="/perfil">
+          <el-dropdown-item>Meu perfil</el-dropdown-item>
         </router-link>
         <el-dropdown-item divided>
           <span @click="logout" style="display:block;">LogOut</span>

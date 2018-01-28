@@ -61,7 +61,6 @@ export default {
   },
   methods: {
     showDetail(purchase) {
-      console.log(purchase.id)
       this.detailDialogIsVisible = true
       this.selectedPurchaseId = purchase.id
     }
