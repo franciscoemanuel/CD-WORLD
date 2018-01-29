@@ -126,11 +126,11 @@ export default {
     position: relative;
     padding-top: 8em;
   }
-  .bg-login {
+  /* .bg-login {
     background-image: url('../../assets/background.jpg');
     background-size: 100% auto;
     background-repeat: no-repeat;
     height: 50em;
     position: inherit;
-  }
+  } */
 </style>
