@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" v-loading="isLoadingAlbums">
     <el-popover ref="genrePopOver" width="400" trigger="click">
       <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">Todos</el-checkbox>
       <div style="margin: 15px 0;"></div>
@@ -22,26 +22,34 @@
         <el-button id="btn-genre" v-popover:genrePopOver size="small">Genêros <i class="el-icon-fa-music"></i></el-button>
       </el-col>
      </el-row>
-    <div class="albums-container" v-loading="isLoadingAlbums">
+    <div class="albums-container">
       <el-row>
         <el-col v-for="album in albums" :key="album.id" :sm="{span: 9, offset: 2}" :md="{span: 6}" :lg="{span: 5, offset: 1}" :xl="{span: 3}">
           <el-card :body-style="{ padding: '0px' }" class="album-container">
-            <img :src="album.cover" class="image">
+            <div class="image-container">
+              <img :src="album.cover" class="image outOfStock">
+            </div>
             <div style="padding: 15px;">
               <el-row>
                 <el-col :span="18" :xl="17">
                   <span class="albumTitle">{{album.title}}</span>
                 </el-col>
                 <el-col :span="6" :xl="7">
-                  <span class="albumPrice">R${{album.price}}</span>
+                  <span class="albumPrice">{{album.price | currency}}</span>
                 </el-col>
               </el-row>
               <div class="bottom clearfix">
                 <span class="albumArtist">{{album.artist}}</span>
                 <span class="albumGenre">{{album.genre}}</span>
-                <el-button type="primary" class="button addToCart" @click.native.prevent="addToCart(album)">
-                  Adicionar ao carrinho
-                  <i class="el-icon-fa-cart-plus" aria-hidden="true"></i>
+                <el-button :type="hasStock(album) ? 'primary' : 'danger'" :disabled="!hasStock(album)" class="button addToCart" @click.native.prevent="addToCart(album)">
+                  <span v-if="hasStock(album)">
+                    Adicionar ao carrinho
+                    <i class="el-icon-fa-cart-plus" aria-hidden="true"></i>
+                  </span>
+                  <span v-else>
+                    Fora de estoque
+                    <i class="el-icon-fa-times"></i>
+                  </span>
                 </el-button>
               </div>
             </div>
@@ -99,14 +107,26 @@ export default {
       const albums = this.$store.getters.loadedAlbums
       const filteredAlbums = filter(albums, album => genres.includes(album.genre))
       this.albums = filteredAlbums
+    },
+    hasStock(album) {
+      return album.stock > 0
     }
   },
   created() {
     this.$store.dispatch('loadAlbums')
       .then(() => {
-        this.albums = this.$store.getters.loadedAlbums
         this.isLoadingAlbums = false
       })
+  },
+  computed: {
+    loadedAlbums() {
+      return this.$store.getters.loadedAlbums
+    }
+  },
+  watch: {
+    loadedAlbums(newValue) {
+      this.albums = newValue
+    }
   }
 }
 </script>

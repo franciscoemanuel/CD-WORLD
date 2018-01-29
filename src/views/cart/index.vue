@@ -48,6 +48,7 @@
 
 <script>
 import { translateFirebaseErrorCodeToMessage } from '@/utils/firebase'
+import { some } from 'lodash'
 
 export default {
   data() {
@@ -73,6 +74,13 @@ export default {
     },
     checkoutPurchase() {
       this.loading = true
+      const albums = this.$store.getters.cart.albums
+      const isInvalidPurchase = purchase => (purchase.stock - purchase.quantity) < 0
+      if (some(albums, isInvalidPurchase)) {
+        this.loading = false
+        this.$notify({ type: 'error', title: 'Erro ao finalizar compra', message: 'Quantidade fora de estoque' })
+        return
+      }
       this.$store.dispatch('checkoutPurchase')
         .then(() => {
           this.loading = false
@@ -83,7 +91,7 @@ export default {
           console.log(err)
           this.loading = false
           const message = translateFirebaseErrorCodeToMessage(err.code)
-          this.$notify({ type: 'error', title: 'Falha ao fazer login', message })
+          this.$notify({ type: 'error', title: 'Erro ao finalizar compra', message })
         })
     }
   },

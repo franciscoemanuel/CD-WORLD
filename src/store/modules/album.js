@@ -13,11 +13,17 @@ const album = {
   },
 
   actions: {
-    async loadAlbums({ commit }) {
-      const data = await firebase.database().ref('albums').once('value')
-      const obj = data.val()
-      const albums = normalizeObjectsToArrayById(obj)
-      commit('SET_LOADED_ALBUMS', albums)
+    loadAlbums({ commit }) {
+      const albumsRef = firebase.database().ref('albums')
+      return new Promise((resolve, reject) => {
+        albumsRef.on('value', snapshot => {
+          if (!snapshot) reject()
+          const data = snapshot.val()
+          const albums = normalizeObjectsToArrayById(data)
+          commit('SET_LOADED_ALBUMS', albums)
+          resolve()
+        })
+      })
     }
   }
 }
