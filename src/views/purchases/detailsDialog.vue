@@ -94,7 +94,7 @@
               </tr>
               <tr class="sup">
                 <td colspan="3" align="center">
-                  www.site.com
+                  https://cd-world.firebaseapp.com
                 </td>
               </tr>
             </tfoot>
