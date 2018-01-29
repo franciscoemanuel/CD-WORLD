@@ -88,6 +88,32 @@ export const constantRouterMap = [
         meta: { title: 'Minhas compras' }
       }
     ]
+  },
+
+  {
+    path: '/gerente/estoque',
+    component: Layout,
+    children: [
+      {
+        path: '/',
+        name: 'estoque',
+        component: () => import('@/views/manager/stock/index'),
+        meta: { title: 'Estoque' }
+      }
+    ]
+  },
+
+  {
+    path: '/gerente/relatorios',
+    component: Layout,
+    children: [
+      {
+        path: '/',
+        name: 'relatorios',
+        component: () => import('@/views/manager/reports/index'),
+        meta: { title: 'Relatórios' }
+      }
+    ]
   }
 
 ]

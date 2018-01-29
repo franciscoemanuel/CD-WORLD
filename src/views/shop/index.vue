@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" v-loading="isLoadingAlbums">
+  <div class="app-container">
     <el-popover ref="genrePopOver" width="400" trigger="click">
       <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">Todos</el-checkbox>
       <div style="margin: 15px 0;"></div>
@@ -22,7 +22,7 @@
         <el-button id="btn-genre" v-popover:genrePopOver size="small">Genêros <i class="el-icon-fa-music"></i></el-button>
       </el-col>
      </el-row>
-    <div class="albums-container">
+    <div class="albums-container" v-loading="isLoadingAlbums">
       <el-row>
         <el-col v-for="album in albums" :key="album.id" :sm="{span: 9, offset: 2}" :md="{span: 6}" :lg="{span: 5, offset: 1}" :xl="{span: 3}">
           <el-card :body-style="{ padding: '0px' }" class="album-container">
@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       checkAll: false,
-      isLoadingAlbums: true,
+      isLoadingAlbums: false,
       searchOption: 'title',
       searchText: '',
       checkedGenres: ['Rap & Hip-Hop', 'Indie rock'],
@@ -113,8 +113,13 @@ export default {
     }
   },
   created() {
+    this.isLoadingAlbums = true
     this.$store.dispatch('loadAlbums')
       .then(() => {
+        this.isLoadingAlbums = false
+      })
+      .catch(err => {
+        console.log(err)
         this.isLoadingAlbums = false
       })
   },

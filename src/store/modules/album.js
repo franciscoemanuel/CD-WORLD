@@ -17,7 +17,6 @@ const album = {
       const albumsRef = firebase.database().ref('albums')
       return new Promise((resolve, reject) => {
         albumsRef.on('value', snapshot => {
-          if (!snapshot) reject()
           const data = snapshot.val()
           const albums = normalizeObjectsToArrayById(data)
           commit('SET_LOADED_ALBUMS', albums)
