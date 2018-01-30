@@ -23,6 +23,23 @@ const album = {
           resolve()
         })
       })
+    },
+    async updateAlbumDate({ commit }, albumToUpdate) {
+      const { id } = albumToUpdate
+      const updatedObj = {}
+      const albumProps = ['title', 'artist', 'genre', 'price', 'cover', 'stock']
+      albumProps.forEach(prop => {
+        const updatedValue = albumToUpdate[prop]
+        if (updatedValue) updatedObj[prop] = updatedValue
+      })
+      await firebase.database().ref('albums').child(id).update(updatedObj)
+    },
+    async removeAlbum({ commit }, albumToRemove) {
+      const { id } = albumToRemove
+      await firebase.database().ref('albums').child(id).remove()
+    },
+    async insertNewAlbum({ commit }, albumToInsert) {
+      await firebase.database().ref('albums').push(albumToInsert)
     }
   }
 }

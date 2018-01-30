@@ -6,6 +6,8 @@ const menuItemsByRole = {
   ],
   'manager': [
     { icon: 'el-icon-fa-archive', title: 'Estoque', link: '/estoque' },
+    { icon: 'el-icon-fa-share', title: 'Compras', link: '/compras' },
+    { icon: 'el-icon-fa-money', title: 'Vendas', link: '/vendas' },
     { icon: 'el-icon-fa-pie-chart', title: 'Relatórios', link: '/relatorios' }
   ]
 }

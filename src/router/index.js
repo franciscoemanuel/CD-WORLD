@@ -84,14 +84,14 @@ export const constantRouterMap = [
       {
         path: '/',
         name: 'minhas-compras',
-        component: () => import('@/views/purchases/index'),
+        component: () => import('@/views/customer/purchases/index'),
         meta: { title: 'Minhas compras' }
       }
     ]
   },
 
   {
-    path: '/gerente/estoque',
+    path: '/estoque',
     component: Layout,
     children: [
       {
@@ -104,7 +104,7 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/gerente/relatorios',
+    path: '/relatorios',
     component: Layout,
     children: [
       {
@@ -112,6 +112,45 @@ export const constantRouterMap = [
         name: 'relatorios',
         component: () => import('@/views/manager/reports/index'),
         meta: { title: 'Relatórios' }
+      }
+    ]
+  },
+
+  {
+    path: '/compras',
+    component: Layout,
+    children: [
+      {
+        path: '/',
+        name: 'compras',
+        component: () => import('@/views/manager/purchases/index'),
+        meta: { title: 'Compras' }
+      }
+    ]
+  },
+
+  {
+    path: '/compras/nova-compra',
+    component: Layout,
+    children: [
+      {
+        path: '/',
+        name: 'nova-compra',
+        component: () => import('@/views/manager/purchases/newPurchase'),
+        meta: { title: 'Nova compra' }
+      }
+    ]
+  },
+
+  {
+    path: '/vendas',
+    component: Layout,
+    children: [
+      {
+        path: '/',
+        name: 'vendas',
+        component: () => import('@/views/manager/sales/index'),
+        meta: { title: 'Vendas' }
       }
     ]
   }

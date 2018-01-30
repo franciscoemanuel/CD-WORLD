@@ -1,10 +1,9 @@
 <template>
- <div class="app-container" v-loading="isLoadingPurchases">
-    <h1>Meus pedidos</h1>
+ <div class="app-container">
     <div class="purchases-container">
       <el-row>
         <el-col>
-          <el-table :data="purchases" empty-text="Nenhuma compra realizada">
+          <el-table :data="sales" empty-text="Nenhuma compra realizada">
             <el-table-column prop="shortId" label="Código do pedido"></el-table-column>
             <el-table-column sortable sort-by="purchaseDate" label="Pedido realizado em">
               <template slot-scope="scope">
@@ -40,35 +39,18 @@
 </template>
 
 <script>
-import { orderBy } from 'lodash'
 export default {
+  props: ['sales'],
   data() {
     return {
-      isLoadingPurchases: true,
       detailDialogIsVisible: false,
       selectedPurchaseId: null
     }
   },
-  created() {
-    this.$store.dispatch('fetchUserPurchases')
-      .then(() => {
-        this.isLoadingPurchases = false
-      })
-      .catch(err => {
-        console.log(err)
-        this.isLoadingPurchases = false
-      })
-  },
   methods: {
     showDetail(purchase) {
-      this.detailDialogIsVisible = true
       this.selectedPurchaseId = purchase.id
-    }
-  },
-  computed: {
-    purchases() {
-      const userPurchases = this.$store.getters.userPurchases
-      return orderBy(userPurchases, 'purchaseDate', 'desc')
+      this.detailDialogIsVisible = true
     }
   }
 }

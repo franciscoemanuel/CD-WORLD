@@ -12,9 +12,11 @@ import './permission'
 import './styles/font-awesome.scss' // font-awesome icons
 import * as firebase from 'firebase'
 import { currencyFilter, dateFilter } from '@/filters' // Filters
-import PurchaseDetailDialog from './views/purchases/detailsDialog'
+import PurchaseDetailDialog from '@/components/Sales/detailsDialog'
+import Sales from '@/components/Sales/'
 
 Vue.component('app-purchase-detail-dialog', PurchaseDetailDialog)
+Vue.component('app-sales-table', Sales)
 Vue.filter('currency', currencyFilter)
 Vue.filter('date', dateFilter)
 Vue.use(ElementUI, { locale })
