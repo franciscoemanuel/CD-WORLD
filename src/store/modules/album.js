@@ -39,7 +39,9 @@ const album = {
       await firebase.database().ref('albums').child(id).remove()
     },
     async insertNewAlbum({ commit }, albumToInsert) {
-      await firebase.database().ref('albums').push(albumToInsert)
+      console.log(albumToInsert)
+      const newAlbum = await firebase.database().ref('albums').push(albumToInsert)
+      return newAlbum.key
     }
   }
 }

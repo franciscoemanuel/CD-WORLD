@@ -1,6 +1,7 @@
 import * as moment from 'moment'
 
 export function currencyFilter(number) {
+  if (!number) return
   return number.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
 

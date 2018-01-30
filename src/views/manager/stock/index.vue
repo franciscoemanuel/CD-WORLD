@@ -14,9 +14,9 @@
             <el-table-column sortable sort-by="title" label="Título" prop="title"></el-table-column>
             <el-table-column sortable sort-by="artist" prop="artist" label="Artista"></el-table-column>
             <el-table-column sortable sort-by="genre" label="Gênero" prop="genre"></el-table-column>
-            <el-table-column label="Preço de venda" sortable sort-by="price">
+            <el-table-column label="Preço de venda" sortable sort-by="sellingPrice">
               <template slot-scope="scope">
-                <span>{{scope.row.price | currency}}</span>
+                <span>{{scope.row.sellingPrice | currency}}</span>
               </template>
             </el-table-column>
             <el-table-column sortable sort-by="stock" prop="stock" label="Quantidade"></el-table-column>
@@ -53,8 +53,8 @@
         <el-form-item prop="cover" label="Imagem de capa (URL)">
           <el-input name="cover" v-model="selectedAlbum.cover" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item prop="price" label="Preço de venda">
-          <el-input-number name="price" v-model="selectedAlbum.price" size="mini" :min="0" :controls="false"></el-input-number>
+        <el-form-item prop="sellingPrice" label="Preço de venda">
+          <el-input-number name="sellingPrice" v-model="selectedAlbum.sellingPrice" size="mini" :min="0" :controls="false"></el-input-number>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -98,7 +98,7 @@ export default {
         artist: [{ required: true, trigger: 'blur', message: 'Insira o nome do artista' }],
         cover: [{ required: true, trigger: 'blur', message: 'Insira o link para a imagem do álbum' }],
         genre: [{ required: true, trigger: 'blur', message: 'Insira o gênero músical' }],
-        price: [{ required: true, trigger: 'blur', message: 'Insira o preço de venda do álbum' }]
+        sellingPrice: [{ required: true, trigger: 'blur', message: 'Insira o preço de venda do álbum' }]
       },
       deletePopOverIsVisible: false
     }

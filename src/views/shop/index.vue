@@ -35,7 +35,7 @@
                   <span class="albumTitle">{{album.title}}</span>
                 </el-col>
                 <el-col :span="6" :xl="7">
-                  <span class="albumPrice">{{album.price | currency}}</span>
+                  <span class="albumPrice">{{album.sellingPrice | currency}}</span>
                 </el-col>
               </el-row>
               <div class="bottom clearfix">

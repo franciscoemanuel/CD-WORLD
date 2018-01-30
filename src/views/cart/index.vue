@@ -13,7 +13,7 @@
           <el-table-column prop="artist" label="Artista"></el-table-column>
           <el-table-column label="Preço unit." min-width="100">
             <template slot-scope="scope">
-              <span>{{scope.row.price | currency}}</span>
+              <span>{{scope.row.sellingPrice | currency}}</span>
             </template>
           </el-table-column>
           <el-table-column label="Quantidade" min-width="150">

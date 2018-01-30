@@ -44,7 +44,7 @@ const purchase = {
 
   actions: {
     addToCart({ commit }, album) {
-      album.subTotal = album.price
+      album.subTotal = album.sellingPrice
       commit('ADD_ALBUM_TO_CART', album)
     },
     calculateTotalPrice({ commit, getters }, albumPrice) {
@@ -53,7 +53,7 @@ const purchase = {
       commit('SET_TOTAL_PRICE', totalPrice)
     },
     recalculateSubTotal({ commit, getters }, album) {
-      const newSubTotal = (album.quantity * album.price)
+      const newSubTotal = (album.quantity * album.sellingPrice)
       const albumId = get(album, 'id')
       commit('UPDATE_ALBUM_SUBTOTAL', { albumId, newSubTotal })
     },

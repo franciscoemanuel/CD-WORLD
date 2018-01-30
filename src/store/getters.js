@@ -6,6 +6,7 @@ const getters = {
   loadedAlbums: state => state.album.loadedAlbums,
   cart: state => state.sale.cart,
   userPurchases: state => state.sale.userPurchases,
-  loadedSales: state => state.sale.loadedSales
+  loadedSales: state => state.sale.loadedSales,
+  loadedStorePurchases: state => state.purchase.loadedStorePurchases
 }
 export default getters

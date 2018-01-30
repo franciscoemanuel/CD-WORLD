@@ -36,7 +36,7 @@
                 <td colspan="3">{{album.title}} - {{album.artist}}</td>
               </tr>
               <tr>
-                <td>{{album.price | currency}}</td>
+                <td>{{album.sellingPrice | currency}}</td>
                 <td>{{album.quantity}}</td>
                 <td>{{album.subTotal | currency}}</td>
               </tr>
