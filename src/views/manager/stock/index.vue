@@ -29,7 +29,7 @@
             </el-table-column>
             <el-table-column label="Remover">
               <template slot-scope="scope">
-                <el-button size="mini" type="danger" @click.prevent.native="removeAlbum(scope.row)" v-popover:deleteAlbumPopOver>
+                <el-button size="mini" type="danger" @click.prevent.native="removeAlbum(scope.row)">
                   <i class="el-icon-fa-times"></i>
                 </el-button>
               </template>
@@ -63,17 +63,13 @@
       </span>
     </el-dialog>
 
-    <el-popover
-      ref="deleteAlbumPopOver"
-      placement="left"
-      width="160"
-      v-model="deletePopOverIsVisible">
-      <p>Você tem certeza?</p>
-      <div style="text-align: right; margin: 0">
-        <el-button size="mini" type="text" @click="deletePopOverIsVisible = false">Cancelar</el-button>
-        <el-button type="primary" size="mini" @click.native.prevent="confirmAlbumRemoval()">Excluir</el-button>
-      </div>
-    </el-popover>
+    <el-dialog title="Excluir" :visible.sync="removeAlbumDialog" width="30%">
+      <span>Tem certeza disso?</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="removeAlbumDialog = false">Cancelar</el-button>
+        <el-button type="primary" @click="confirmAlbumRemoval()">Cofirmar</el-button>
+      </span>
+    </el-dialog>
 
   </div>
 </template>
@@ -100,7 +96,7 @@ export default {
         genre: [{ required: true, trigger: 'blur', message: 'Insira o gênero músical' }],
         sellingPrice: [{ required: true, trigger: 'blur', message: 'Insira o preço de venda do álbum' }]
       },
-      deletePopOverIsVisible: false
+      removeAlbumDialog: false
     }
   },
   methods: {
@@ -129,12 +125,12 @@ export default {
       })
     },
     removeAlbum(albumToRemove) {
-      this.deletePopOverIsVisible = true
+      this.removeAlbumDialog = true
       this.selectedAlbum = albumToRemove
     },
     confirmAlbumRemoval() {
       const albumToRemove = this.selectedAlbum
-      this.deletePopOverIsVisible = false
+      this.removeAlbumDialog = false
       this.$store.dispatch('removeAlbum', albumToRemove)
         .then(() => {
           this.$notify({ type: 'success', title: 'Sucesso', message: 'Álbum removido com sucesso!' })

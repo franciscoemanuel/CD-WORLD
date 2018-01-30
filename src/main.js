@@ -11,7 +11,7 @@ import '@/icons' // icon
 import './permission'
 import './styles/font-awesome.scss' // font-awesome icons
 import * as firebase from 'firebase'
-import { currencyFilter, dateFilter } from '@/filters' // Filters
+import { currencyFilter, dateFilter, truncateFilter } from '@/filters' // Filters
 import PurchaseDetailDialog from '@/components/Sales/detailsDialog'
 import Sales from '@/components/Sales/'
 
@@ -19,6 +19,7 @@ Vue.component('app-purchase-detail-dialog', PurchaseDetailDialog)
 Vue.component('app-sales-table', Sales)
 Vue.filter('currency', currencyFilter)
 Vue.filter('date', dateFilter)
+Vue.filter('truncate', truncateFilter)
 Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false

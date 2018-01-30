@@ -9,3 +9,9 @@ export function dateFilter(date) {
   moment.locale('pt-br')
   return moment(date).format('LLL')
 }
+
+export function truncateFilter(title, size) {
+  if (!title) return
+  const truncatedString = title.substring(0, size)
+  return title.length >= size ? `${truncatedString}...` : title
+}

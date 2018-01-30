@@ -4,7 +4,11 @@
       <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">Todos</el-checkbox>
       <div style="margin: 15px 0;"></div>
       <el-checkbox-group v-model="checkedGenres" @change="handleCheckedGenresChange">
-        <el-checkbox v-for="genre in genreOptions" :label="genre" :key="genre">{{genre}}</el-checkbox>
+        <el-row>
+          <el-col>
+            <el-checkbox v-for="genre in genreOptions" :label="genre" :key="genre">{{genre}}</el-checkbox>
+          </el-col>
+        </el-row>
       </el-checkbox-group>
     </el-popover>
 
@@ -19,7 +23,7 @@
         </el-input>
       </el-col>
       <el-col :xs="{span: 24, offset: 10}" :sm="{span: 2}">
-        <el-button id="btn-genre" v-popover:genrePopOver size="small">Genêros <i class="el-icon-fa-music"></i></el-button>
+        <el-button id="btn-genre" v-popover:genrePopOver>Genêros <i class="el-icon-fa-music"></i></el-button>
       </el-col>
      </el-row>
     <div class="albums-container" v-loading="isLoadingAlbums">
@@ -32,7 +36,10 @@
             <div style="padding: 15px;">
               <el-row>
                 <el-col :span="18" :xl="17">
-                  <span class="albumTitle">{{album.title}}</span>
+                  <el-tooltip placement="top">
+                    <div slot="content">{{album.title}}</div>
+                    <span class="albumTitle">{{album.title | truncate(17) }}</span>
+                  </el-tooltip>
                 </el-col>
                 <el-col :span="6" :xl="7">
                   <span class="albumPrice">{{album.sellingPrice | currency}}</span>
@@ -70,8 +77,7 @@ export default {
       isLoadingAlbums: false,
       searchOption: 'title',
       searchText: '',
-      checkedGenres: ['Rap & Hip-Hop', 'Indie rock'],
-      genreOptions: ['Indie rock', 'Rap & Hip-Hop', 'Eletrônica'],
+      checkedGenres: [],
       isIndeterminate: true,
       albums: []
     }
@@ -116,6 +122,10 @@ export default {
     this.isLoadingAlbums = true
     this.$store.dispatch('loadAlbums')
       .then(() => {
+        return this.$store.dispatch('fetchGenres')
+      })
+      .then(() => {
+        this.checkedGenres = this.genreOptions
         this.isLoadingAlbums = false
       })
       .catch(err => {
@@ -126,6 +136,9 @@ export default {
   computed: {
     loadedAlbums() {
       return this.$store.getters.loadedAlbums
+    },
+    genreOptions() {
+      return this.$store.getters.loadedGenres
     }
   },
   watch: {

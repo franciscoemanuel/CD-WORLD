@@ -1,7 +1,7 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" v-loading="isLoadingPurchases">
     <el-row>
-      <el-col :span="22">
+      <el-col :span="21">
         <h1>Compras da loja</h1>
       </el-col>
       <el-col :span="2">
@@ -12,20 +12,20 @@
       <el-col>
          <el-table :data="storePurchases" empty-text="Nenhuma compra realizada">
             <el-table-column prop="id" label="Código da compra"></el-table-column>
-            <el-table-column sortable sort-by="purchaseDate" label="Pedido realizado em">
+            <el-table-column sortable sort-by="purchaseDate" label="Data da compra">
               <template slot-scope="scope">
                 <span>{{scope.row.purchaseDate | date}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="albumData.title" label="Nome do CD"></el-table-column>
             <el-table-column prop="albumData.artist" label="Artista"></el-table-column>
-            <el-table-column sortable sort-by="buyingPrice" label="Preço de compra">
+            <el-table-column sortable sort-by="buyingPrice" label="Preço Unit.">
               <template slot-scope="scope">
                 <span>{{scope.row.buyingPrice | currency}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="stock" label="Quantidade comprada"></el-table-column>            
-            <el-table-column sortable sort-by="totalBuyingPrice" label="Total do pedido">
+            <el-table-column prop="stock" label="Qtd. comprada"></el-table-column>            
+            <el-table-column sortable sort-by="totalBuyingPrice" label="Total">
               <template slot-scope="scope">
                 <span>{{scope.row.totalBuyingPrice | currency}}</span>
               </template>
@@ -41,7 +41,7 @@ import { orderBy } from 'lodash'
 export default {
   data() {
     return {
-      isLoadingPurchases: false
+      isLoadingPurchases: true
     }
   },
   methods: {

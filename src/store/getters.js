@@ -7,6 +7,7 @@ const getters = {
   cart: state => state.sale.cart,
   userPurchases: state => state.sale.userPurchases,
   loadedSales: state => state.sale.loadedSales,
-  loadedStorePurchases: state => state.purchase.loadedStorePurchases
+  loadedStorePurchases: state => state.purchase.loadedStorePurchases,
+  loadedGenres: state => state.genre.loadedGenres
 }
 export default getters

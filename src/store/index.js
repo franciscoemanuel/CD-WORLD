@@ -5,6 +5,7 @@ import auth from './modules/auth'
 import album from './modules/album'
 import sale from './modules/sale'
 import purchase from './modules/purchase'
+import genre from './modules/genre'
 import getters from './getters'
 
 Vue.use(Vuex)
@@ -15,7 +16,8 @@ const store = new Vuex.Store({
     auth,
     album,
     sale,
-    purchase
+    purchase,
+    genre
   },
   getters
 })

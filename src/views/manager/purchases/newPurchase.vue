@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" v-loading="isLoadingForm">
     <el-row>
       <el-col>
         <el-form :model="newPurchaseForm" :rules="formRules" ref="newPurchaseForm">
@@ -9,11 +9,18 @@
           <el-form-item prop="artist" label="Artista">
             <el-input name="artist" v-model="newPurchaseForm.artist" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item prop="genre" label="Gênero">
-            <el-input name="genre" v-model="newPurchaseForm.genre" auto-complete="off"></el-input>
-          </el-form-item>
           <el-form-item prop="cover" label="Imagem de capa (URL)">
             <el-input name="cover" v-model="newPurchaseForm.cover" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item prop="genre" label="Gênero musical">
+             <el-select v-model="newPurchaseForm.genre" filterable placeholder="Selecione um gênero">
+              <el-option
+                v-for="genre in genres"
+                :key="genre"
+                :label="genre"
+                :value="genre">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-row>
             <el-col :sm="{span: 6}" :lg="{span: 4}">
@@ -66,15 +73,16 @@ export default {
       }
     }
     return {
+      isLoadingForm: false,
       albumProps: ['title', 'artist', 'genre', 'cover', 'sellingPrice', 'stock'],
-      purchaseProps: ['buyingPrice', 'purchaseDate', 'totalBuyingPrice', 'stock'],
+      purchaseProps: ['buyingPrice', 'totalBuyingPrice', 'stock'],
       newPurchaseForm: {
         title: '',
         artist: '',
         genre: '',
         cover: '',
         sellingPrice: '',
-        purchaseDate: '',
+        purchaseDate: new Date(),
         stock: 0,
         buyingPrice: 0,
         totalBuyingPrice: 0
@@ -112,9 +120,10 @@ export default {
           const newAlbum = pick(this.newPurchaseForm, this.albumProps)
           this.$store.dispatch('insertNewAlbum', newAlbum)
             .then(albumId => {
-
+              const purchaseDate = new Date(this.newPurchaseForm.purchaseDate).toISOString()
               const newPurchase = pick(this.newPurchaseForm, this.purchaseProps)
               set(newPurchase, 'albumId', albumId)
+              set(newPurchase, 'purchaseDate', purchaseDate)
               return this.$store.dispatch('insertNewPurchase', newPurchase)
             })
             .then(() => {
@@ -138,6 +147,22 @@ export default {
       if (!unitPrice | !stockQuantity) return
       const totalPrice = unitPrice * stockQuantity
       set(this.newPurchaseForm, 'totalBuyingPrice', totalPrice)
+    }
+  },
+  created() {
+    this.isLoadingForm = true
+    this.$store.dispatch('fetchGenres')
+      .then(() => {
+        this.isLoadingForm = false
+      })
+      .catch(err => {
+        console.log(err)
+        this.isLoadingForm = false
+      })
+  },
+  computed: {
+    genres() {
+      return this.$store.getters.loadedGenres
     }
   }
 }
